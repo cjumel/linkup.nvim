@@ -12,11 +12,7 @@ function M.setup(opts)
 
   local new_config = vim.tbl_extend("force", default_config, opts)
   if new_config["api_key"] == nil then
-    local api_key = os.getenv("LINKUP_API_KEY")
-    if api_key == nil then
-      error("Linkup API key not found.")
-    end
-    new_config["api_key"] = api_key
+    new_config["api_key"] = os.getenv("LINKUP_API_KEY")
   end
 
   for k, v in pairs(new_config) do

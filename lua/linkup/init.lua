@@ -3,6 +3,10 @@ local M = {}
 function M.setup(opts)
   local config = require("linkup.config")
   config.setup(opts)
+
+  if config.api_key == nil then
+    error("Linkup API key not found.")
+  end
 end
 
 local function is_visual_mode()
@@ -52,6 +56,11 @@ end
 
 function M.standard_search()
   local api = require("linkup.api")
+  local config = require("linkup.config")
+
+  if config.api_key == nil then
+    error("Linkup API key not found.")
+  end
 
   local text = ""
   if is_visual_mode() then
@@ -69,6 +78,11 @@ end
 
 function M.deep_search()
   local api = require("linkup.api")
+  local config = require("linkup.config")
+
+  if config.api_key == nil then
+    error("Linkup API key not found.")
+  end
 
   local text = ""
   if is_visual_mode() then
