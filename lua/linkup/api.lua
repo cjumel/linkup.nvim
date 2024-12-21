@@ -4,6 +4,10 @@ function M.search(query, depth, output_type, callback)
   local config = require("linkup.config")
   local curl = require("plenary.curl")
 
+  if config.api_key == nil then
+    error("Linkup API key not found.")
+  end
+
   local headers = {
     ["Authorization"] = "Bearer " .. config.api_key,
     ["Content-Type"] = "application/json",
