@@ -59,7 +59,7 @@ function M.standard_search()
   end
 
   vim.ui.input({ prompt = "Linkup Standard Search", default = text }, function(input)
-    if input ~= "" then
+    if input ~= nil and input ~= "" then
       api.search(input, "standard", "sourcedAnswer", function(response)
         vim.notify(response.answer, vim.log.levels.INFO, { title = "Linkup" })
       end)
@@ -76,7 +76,7 @@ function M.deep_search()
   end
 
   vim.ui.input({ prompt = "Linkup Deep Search", default = text }, function(input)
-    if input ~= "" then
+    if input ~= nil and input ~= "" then
       api.search(input, "deep", "sourcedAnswer", function(response)
         vim.notify(response.answer, vim.log.levels.INFO, { title = "Linkup" })
       end)
