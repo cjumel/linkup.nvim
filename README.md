@@ -25,6 +25,12 @@ To install the plugin, you can use your favorite plugin manager, for example
       mode = { "n", "v" },
       desc = "[L]inkup: [D]eep search",
     },
+    {
+      "<leader>lw",
+      function() require("linkup").open_website() end,
+      mode = { "n", "v" },
+      desc = "[L]inkup: open [W]ebsite",
+    }
   },
   opts = {}
 }
