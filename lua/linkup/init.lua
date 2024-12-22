@@ -25,7 +25,7 @@ function M.standard_search()
   vim.ui.input({ prompt = "Linkup Standard Search", default = text }, function(input)
     if input ~= nil and input ~= "" then
       api.search(input, "standard", "sourcedAnswer", function(response)
-        vim.notify("Linkup answer: " .. response.answer, vim.log.levels.INFO, { title = "Linkup" })
+        vim.notify(response.answer, vim.log.levels.INFO, { title = "Linkup" })
       end)
     end
   end)
@@ -44,7 +44,7 @@ function M.deep_search()
   vim.ui.input({ prompt = "Linkup Deep Search", default = text }, function(input)
     if input ~= nil and input ~= "" then
       api.search(input, "deep", "sourcedAnswer", function(response)
-        vim.notify("Linkup answer: " .. response.answer, vim.log.levels.INFO, { title = "Linkup" })
+        vim.notify(response.answer, vim.log.levels.INFO, { title = "Linkup" })
       end)
     end
   end)
