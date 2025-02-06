@@ -31,3 +31,18 @@ To install the plugin, you can use your favorite plugin manager, for example
 ```
 
 </details>
+
+> [!TIP]
+>
+> As linkup.nvim processes queries in the background and sends the results as notifications, I find
+> convenient to create a keymap to yank the latest notification, for instance, with
+> [snacks.nvim](https://github.com/folke/snacks.nvim):
+>
+> ```lua
+> vim.keymap.set("n", "<leader>yn", function()
+>   local notification_history = Snacks.notifier.get_history({ reverse = true })
+>   local content = notification_history[1].msg
+>   vim.fn.setreg('"', content)
+>   vim.notify('Yanked "' .. content .. '"')
+> end, { desc = "[Y]ank: [N]otification" })
+> ```
