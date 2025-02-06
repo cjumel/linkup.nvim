@@ -2,13 +2,17 @@ local curl = require("plenary.curl")
 
 local M = {}
 
+---@class linkup.Config
+---@field api_key? string The Linkup API key. If nil, the plugin will try to use the environment
+--- variable LINKUP_API_KEY.
+---@field base_url string The Linkup API base URL.
 local config = {
-  -- The Linkup API key. If nil, the plugin will try to use the environment variable LINKUP_API_KEY.
   api_key = nil,
-  -- The Linkup API base URL.
   base_url = "https://api.linkup.so/v1",
 }
 
+--- Setup the linkup.nvim plugin.
+---@param opts linkup.Config The options to pass to the plugin.
 function M.setup(opts)
   opts = opts or {}
   local new_config = vim.tbl_extend("force", config, opts)
@@ -34,6 +38,11 @@ function M.setup(opts)
   )
 end
 
+--- Call the Linkup API.
+---@param query string The query to perform.
+---@param depth string The type of query to perform.
+---@param output_type string The type of output to require.
+---@param callback fun(response: table): nil The function to call once the API has been called.
 local function linkup(query, depth, output_type, callback)
   local headers = {
     ["Authorization"] = "Bearer " .. config.api_key,
@@ -63,6 +72,7 @@ local function linkup(query, depth, output_type, callback)
   })
 end
 
+--- Perform a standard search on the Linkup API.
 function M.standard_search()
   if config.api_key == nil then
     error("Linkup API key not found.")
@@ -77,6 +87,7 @@ function M.standard_search()
   end)
 end
 
+--- Perform a deep search on the Linkup API.
 function M.deep_search()
   if config.api_key == nil then
     error("Linkup API key not found.")
