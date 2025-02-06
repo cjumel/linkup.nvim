@@ -3,14 +3,6 @@ local config = require("linkup.config")
 
 local M = {}
 
-function M.setup(opts)
-  config.setup(opts)
-
-  if config.api_key == nil then
-    error("Linkup API key not found.")
-  end
-end
-
 function M.standard_search()
   if config.api_key == nil then
     error("Linkup API key not found.")
@@ -37,6 +29,24 @@ function M.deep_search()
       end)
     end
   end)
+end
+
+function M.setup(opts)
+  config.setup(opts)
+  if config.api_key == nil then
+    error("Linkup API key not found.")
+  end
+
+  vim.api.nvim_create_user_command(
+    "LinkupStandardSearch",
+    M.standard_search,
+    { desc = "Perform a standard search with the Linkup API" }
+  )
+  vim.api.nvim_create_user_command(
+    "LinkupDeepSearch",
+    M.deep_search,
+    { desc = "Perform a deep search with the Linkup API" }
+  )
 end
 
 return M
