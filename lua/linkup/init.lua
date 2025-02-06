@@ -50,30 +50,4 @@ function M.deep_search()
   end)
 end
 
-function M.open_website()
-  if config.api_key == nil then
-    error("Linkup API key not found.")
-  end
-
-  local text = ""
-  if visual_mode.is_on() then
-    text = visual_mode.get_text()
-  end
-
-  vim.ui.input({ prompt = "Open website", default = text }, function(input)
-    if input ~= nil and input ~= "" then
-      local query = 'What is the URL of the website corresponding to the terms "' .. input .. '"?'
-      api.search(query, "standard", "searchResults", function(response)
-        local result = response.results[1]
-        vim.notify(
-          "Opening " .. result["name"] .. " (" .. result["url"] .. ")",
-          vim.log.levels.INFO,
-          { title = "Linkup" }
-        )
-        vim.ui.open(result["url"])
-      end)
-    end
-  end)
-end
-
 return M
