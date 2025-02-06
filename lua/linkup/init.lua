@@ -44,19 +44,16 @@ end
 ---@param output_type string The type of output to require.
 ---@param callback fun(response: table): nil The function to call once the API has been called.
 local function linkup(query, depth, output_type, callback)
-  local headers = {
-    ["Authorization"] = "Bearer " .. config.api_key,
-    ["Content-Type"] = "application/json",
-  }
-  local data = vim.json.encode({
-    q = query,
-    depth = depth,
-    outputType = output_type,
-  })
-
-  return curl.post(config.base_url .. "/search", {
-    headers = headers,
-    body = data,
+  curl.post(config.base_url .. "/search", {
+    headers = {
+      ["Authorization"] = "Bearer " .. config.api_key,
+      ["Content-Type"] = "application/json",
+    },
+    body = vim.json.encode({
+      q = query,
+      depth = depth,
+      outputType = output_type,
+    }),
     callback = function(response)
       local body = vim.json.decode(response.body)
       if body["error"] then
@@ -65,7 +62,7 @@ local function linkup(query, depth, output_type, callback)
           .. body["statusCode"]
           .. ") - "
           .. table.concat(body["message"], " ")
-        vim.notify(message, vim.log.levels.WARN, { title = "Linkup" })
+        vim.notify(message, vim.log.levels.WARN, { title = "linkup.nvim" })
       end
       callback(body)
     end,
@@ -74,14 +71,10 @@ end
 
 --- Perform a standard search on the Linkup API.
 function M.standard_search()
-  if config.api_key == nil then
-    error("Linkup API key not found.")
-  end
-
   vim.ui.input({ prompt = "Linkup Standard Search" }, function(input)
     if input ~= nil and input ~= "" then
       linkup(input, "standard", "sourcedAnswer", function(response)
-        vim.notify(response.answer, vim.log.levels.INFO, { title = "Linkup" })
+        vim.notify(response.answer, vim.log.levels.INFO, { title = "linkup.nvim" })
       end)
     end
   end)
@@ -89,14 +82,10 @@ end
 
 --- Perform a deep search on the Linkup API.
 function M.deep_search()
-  if config.api_key == nil then
-    error("Linkup API key not found.")
-  end
-
   vim.ui.input({ prompt = "Linkup Deep Search" }, function(input)
     if input ~= nil and input ~= "" then
       linkup(input, "deep", "sourcedAnswer", function(response)
-        vim.notify(response.answer, vim.log.levels.INFO, { title = "Linkup" })
+        vim.notify(response.answer, vim.log.levels.INFO, { title = "linkup.nvim" })
       end)
     end
   end)
