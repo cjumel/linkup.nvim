@@ -6,9 +6,11 @@ local M = {}
 ---@field api_key? string The Linkup API key. If nil, the plugin will try to use the environment
 --- variable LINKUP_API_KEY.
 ---@field base_url string The Linkup API base URL.
+---@field include_images boolean Whether to include images in the response.
 local config = {
   api_key = nil,
   base_url = "https://api.linkup.so/v1",
+  include_images = false,
 }
 
 --- Setup the linkup.nvim plugin.
@@ -51,6 +53,11 @@ function M.setup(opts)
     M.view_last_query_sources,
     { desc = "View the sources of the last query" }
   )
+  vim.api.nvim_create_user_command(
+    "LinkupToggleIncludeImages",
+    M.toggle_include_images,
+    { desc = "Toggle the `include_images` option" }
+  )
 end
 
 --- Call the Linkup API.
@@ -68,6 +75,7 @@ local function linkup(query, depth, output_type, callback)
       q = query,
       depth = depth,
       outputType = output_type,
+      includeImages = config.include_images,
     }),
     callback = function(response)
       local body = vim.json.decode(response.body)
@@ -117,6 +125,15 @@ function M.view_last_query_sources()
     vim.log.levels.INFO,
     { title = "linkup.nvim" }
   )
+end
+
+function M.toggle_include_images()
+  config.include_images = not config.include_images
+  if config.include_images then
+    vim.notify("`include_images` enabled", vim.log.levels.INFO, { title = "linkup.nvim" })
+  else
+    vim.notify("`include_images` disabled", vim.log.levels.INFO, { title = "linkup.nvim" })
+  end
 end
 
 return M
