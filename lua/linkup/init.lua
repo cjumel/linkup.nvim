@@ -109,7 +109,11 @@ function M.view_last_query_sources()
     vim.notify("No previous query found.", vim.log.levels.WARN, { title = "linkup.nvim" })
     return
   end
-  vim.notify(vim.g._linkup_last_query_sources, vim.log.levels.INFO, { title = "linkup.nvim" })
+  vim.notify(
+    vim.inspect(vim.g._linkup_last_query_sources),
+    vim.log.levels.INFO,
+    { title = "linkup.nvim" }
+  )
 end
 
 return M
