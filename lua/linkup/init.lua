@@ -16,20 +16,24 @@ local config = {
 function M.setup(opts)
   opts = opts or {}
   local new_config = vim.tbl_extend("force", config, opts)
-  if new_config["api_key"] == nil then
-    new_config["api_key"] = os.getenv("LINKUP_API_KEY")
+  if not new_config.api_key or new_config.api_key == "" then
+    local env_api_key = os.getenv("LINKUP_API_KEY")
+    if env_api_key and env_api_key ~= "" then
+      new_config.api_key = env_api_key
+    else
+      error("Linkup API key not found.")
+    end
   end
-  if new_config["base_url"] == nil then
+  if not new_config.base_url or new_config.base_url == "" then
     local env_base_url = os.getenv("LINKUP_BASE_URL")
     if env_base_url and env_base_url ~= "" then
-      new_config["base_url"] = env_base_url
+      new_config.base_url = env_base_url
+    else
+      error("Linkup API base URL not found.")
     end
   end
   for k, v in pairs(new_config) do
     config[k] = v
-  end
-  if config.api_key == nil then
-    error("Linkup API key not found.")
   end
 
   vim.api.nvim_create_user_command(
