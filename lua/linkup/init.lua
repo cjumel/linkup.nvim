@@ -67,12 +67,17 @@ local function linkup(query, depth, output_type, callback)
     }),
     callback = function(response)
       local body = vim.json.decode(response.body)
-      if body["error"] then
-        local message = body["error"]
-          .. " ("
-          .. body["statusCode"]
-          .. ") - "
-          .. table.concat(body["message"], " ")
+      local error = body["error"]
+      if error then
+        local message = error
+        local status_code = body["statusCode"]
+        if status_code then
+          message = message .. " (" .. status_code .. ")"
+        end
+        local details = body["message"]
+        if details then
+          message = message .. " - " .. table.concat(details, " ")
+        end
         vim.notify(message, vim.log.levels.WARN, { title = "linkup.nvim" })
       end
       callback(body)
