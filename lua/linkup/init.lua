@@ -36,6 +36,11 @@ function M.setup(opts)
     M.deep_search,
     { desc = "Perform a deep search with the Linkup API" }
   )
+  vim.api.nvim_create_user_command(
+    "LinkupViewLastQuerySources",
+    M.view_last_query_sources,
+    { desc = "View the sources of the last query" }
+  )
 end
 
 --- Call the Linkup API.
@@ -75,6 +80,7 @@ function M.standard_search()
     if input ~= nil and input ~= "" then
       linkup(input, "standard", "sourcedAnswer", function(response)
         vim.notify(response.answer, vim.log.levels.INFO, { title = "linkup.nvim" })
+        vim.g._linkup_last_query_sources = response.sources
       end)
     end
   end)
@@ -86,9 +92,18 @@ function M.deep_search()
     if input ~= nil and input ~= "" then
       linkup(input, "deep", "sourcedAnswer", function(response)
         vim.notify(response.answer, vim.log.levels.INFO, { title = "linkup.nvim" })
+        vim.g._linkup_last_query_sources = response.sources
       end)
     end
   end)
+end
+
+function M.view_last_query_sources()
+  if vim.g._linkup_last_query_sources == nil then
+    vim.notify("No previous query found.", vim.log.levels.WARN, { title = "linkup.nvim" })
+    return
+  end
+  vim.notify(vim.g._linkup_last_query_sources, vim.log.levels.INFO, { title = "linkup.nvim" })
 end
 
 return M
