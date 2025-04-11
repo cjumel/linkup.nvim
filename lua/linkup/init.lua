@@ -3,9 +3,10 @@ local curl = require("plenary.curl")
 local M = {}
 
 ---@class linkup.Config
----@field api_key? string The Linkup API key. If nil, the plugin will try to use the environment
---- variable LINKUP_API_KEY.
----@field base_url string The Linkup API base URL.
+---@field api_key? string The Linkup API key. If nil, false or "", the plugin will try to use the
+--- environment variable LINKUP_API_KEY.
+---@field base_url string The Linkup API base URL. If nil, false or "", the plugin will try to use
+--- the environment variable LINKUP_BASE_URL.
 ---@field include_images boolean Whether to include images in the response.
 local config = {
   api_key = nil,
@@ -115,6 +116,7 @@ function M.deep_search()
   end)
 end
 
+--- View the sources of the last query response.
 function M.view_last_query_sources()
   if vim.g._linkup_last_query_sources == nil then
     vim.notify("No previous query found.", vim.log.levels.WARN, { title = "linkup.nvim" })
@@ -127,6 +129,7 @@ function M.view_last_query_sources()
   )
 end
 
+--- Toggle the `include_images` option.
 function M.toggle_include_images()
   config.include_images = not config.include_images
   if config.include_images then
