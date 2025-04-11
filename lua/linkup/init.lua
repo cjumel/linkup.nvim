@@ -19,6 +19,12 @@ function M.setup(opts)
   if new_config["api_key"] == nil then
     new_config["api_key"] = os.getenv("LINKUP_API_KEY")
   end
+  if new_config["base_url"] == nil then
+    local env_base_url = os.getenv("LINKUP_BASE_URL")
+    if env_base_url and env_base_url ~= "" then
+      new_config["base_url"] = env_base_url
+    end
+  end
   for k, v in pairs(new_config) do
     config[k] = v
   end
